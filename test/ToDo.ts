@@ -5,16 +5,34 @@ import {
 import { anyValue } from "@nomicfoundation/hardhat-chai-matchers/withArgs";
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { SdkError } from "@metaplex-foundation/js";
+import { ToDo__factory } from "../typechain-types";
 
 describe("ToDo List", function () {
   
   async function deployToDo() {
-    const SetterGetter = await ethers.getContractFactory("SetterGetter");
-    const setterGetter = await SetterGetter.deploy();
+    const ToDo = await ethers.getContractFactory("ToDo");
+    const todo = await ToDo.deploy();
 
-    return { setterGetter };
+    return { todo };
   }
+
+  
+  describe("LISTING", function () {
+    it("Should be able to return te list of my completed task", async function () {
+      const { todo } = await loadFixture(deployToDo);
+
+      await todo.createTodo("sample title", "sample dscription");
+      
+      const todoIndex = 0;
+
+      await todo.updateIsDone(todoIndex, true);
+
+      const completed = await todo.getTodo()[todoIndex].isDone;
+
+      expect(completed).to.equal(true);
+    });
+  });
+  });
 
     
 /*    const ONE_YEAR_IN_SECS = 365 * 24 * 60 * 60;
@@ -140,6 +158,6 @@ describe("ToDo List", function () {
 });
 
 */
-SdkError
+
 
 
